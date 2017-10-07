@@ -5,6 +5,7 @@
                 <li v-if="item.sender == 'parent'">父页面：{{item.msg}}</li>
                 <li v-else>子页面：{{item.msg}}</li>
             </template>
+            <li class="toView"></li>
         </ul>
         <div class="send">
             <div class="input">
@@ -26,8 +27,16 @@ export default {
         }
     },
 
+    watch: {
+        msgList () {
+            let $toView = document.querySelector('.toView');
+            $toView.scrollIntoView();
+        }
+    },
+
     methods: {
         send () {
+            if(this.msg == '') { return; }
             let msgObj = {
                 msg: this.msg,
                 sender: 'son'
@@ -48,9 +57,26 @@ export default {
 </script>
 
 <style scoped lang="less">
-    .send {
+    ul {
+        position: absolute;
+        top: 0;
+        bottom: 55px;
+        left: 50%;
+        transform: translate(-50%, 0);
         width: 300px;
-        margin: 20px auto;
+        overflow: auto;
+        padding: 10px;
+        .toView {
+            position: relative;
+            height: .5rem;
+            margin-top: .5rem;
+        }
+    }
+    .send {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translate(-50%, 0);
         text-align: center;
         input,
         a {
@@ -62,6 +88,7 @@ export default {
             outline: none;
         }
         .input {
+            width: 300px;
             height: 40px;
             font-size: 0;
             input {

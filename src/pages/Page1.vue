@@ -5,7 +5,7 @@
                 <input type="text" v-model="msg" @keyup.enter="send">
                 <a @click="send" href="javascript:;">发送</a>
             </div>
-            <a class="new" @click="open" href="javascript:;">新建窗口</a>
+            <a class="new" @click="open" href="javascript:;">+ 新建窗口</a>
         </div>
 
         <!-- <div class="receive">
@@ -18,6 +18,7 @@
                     <li v-if="item.sender == 'parent'">父页面：{{item.msg}}</li>
                     <li v-else>子页面：{{item.msg}}</li>
                 </template>
+                <li class="toView"></li>
             </ul>
         </div>
     </div>
@@ -38,8 +39,16 @@ export default {
         }
     },
 
+    watch: {
+        msgList () {
+            let $toView = document.querySelector('.toView');
+            $toView.scrollIntoView();
+        }
+    },
+
     methods: {
         send () {
+            if(this.msg == '') { return; }
             let msgObj = {
                 msg: this.msg,
                 sender: 'parent'
@@ -123,8 +132,20 @@ export default {
     .receive {
         height: 250px;
         border: 1px solid #aaa;
+        overflow: auto;
+        padding: 10px;
         iframe {
             height: 100%;
+        }
+        ul {
+            li {
+                list-style: none;
+            }
+        }
+        .toView {
+            position: relative;
+            height: .5rem;
+            margin-top: .5rem;
         }
     }
 </style>
